@@ -1,0 +1,304 @@
+  [
+    {
+      "id": "1708020200083190",
+      "userid": 463604867,
+      "tradeno": "1099130845",
+      "deal_goods": 1,
+      "deal_type": 1,
+      "deal_num": 24,
+      "deal_gold_num": 0.166560,
+      "deal_price": 1212.11,
+      "deal_turnover": 1212.11,
+      "deal_poundage": 0.00,
+      "deal_date": "2017-08-02",
+      "deal_time": 1501658745
+    }
+  ]
+
+  id: 数据唯一标识
+  userid: 用户userid
+  tradeno: 交易账号
+  deal_goods: 交易品种
+    1：Ag(T+D)
+    2: Au(T+D)
+    3: mAu(T+D)
+    4: iAu99.99
+    5: Au99.99
+    6: Au(T+N1)
+    7: Au(T+N2)
+  deal_type: 交易类型
+    1：开仓
+    2：平仓
+  deal_num: 交易手数
+  deal_gold_num: 标准黄金手数
+  deal_price: 成交价格
+  deal_turnover: 成交金额
+  deal_poundage: 手续费
+  deal_date: 交易日 （取浦发的成交日期）
+  deal_time: 交易时间 （取浦发的成交时间）
+
+  完整配置
+  CRM基础组件：
+    title： 标题
+    date： 单个日期
+    dates：日期组
+    select：多选框
+    selects：多选框组
+    radio：单选框
+    tree：树
+    input：输入框
+  CRM基础组件属性：
+    公有属性：
+      desc: 组件描述
+      type: 组件类型
+      level: 组件层级
+      width: 组件宽度
+      colspan: 组件colspan对应table的colspan
+    组件私有属性：
+      date：
+        name：组件name，对应html标签name属性
+        format：日期格式，默认yyyy-MM-dd
+      dates：
+        name：组件name，数组形式['a', 'b']
+        format: 日期格式，默认yyyy-MM-dd
+      select：
+        name：组件name
+        options：数据源，数组形式
+      selects：
+        name：组件name，数组形式['a', 'b']
+        options: 数据源，数组形式[[a组数据源], [b组数据源]]
+      radio:
+        name: 组件name
+        options：数据源，数组形式
+      tree：
+        name：组件name，数组形式['a', 'b']
+        selected 组件选中上传的值，数组形式['a', 'b']
+        options: 数据源
+      input：
+        name：组件name
+
+
+      简单配置：
+      上述完整配置功能完善，但是写法复杂，不利于实际开发
+      所以直接将CRM常用的组件再次封装
+      有如下组件：
+        title：标题组件
+        salerTree: 销售树
+        date：日期组件
+        dateGroup：日期组组件
+        orderGroup：排序组件
+        input：输入框组件
+        radio：单选按钮组件
+      
+      优势：代码量少，写法简单。
+      劣势：不能灵活配置。
+
+
+      完整配置和简单配置使用方法都在/sge/controllers/test.php/testconitemaction()中有示例
+
+  
+  CRM发送字段
+  [
+    {
+      "userid": 44259865,
+      "time": 1500699563,
+      "platform": 1
+    }
+  ]
+  字段详解
+  userid：用户userid，
+  time: 用户首次平仓时间
+  platform：开户平台
+    1：深圳金融
+    2：浦发银行
+    4：工商银行
+    8：平安银行
+  
+
+=== 通用活动导入 ===
+  导入脚本：cron_lj_import_activity_data.php
+  导入配置：
+      新增AppCode，填入以下值：
+      活动序号,活动名称,活动crmid/接口Api,活动描述,额外参数,取值类型
+      活动序号：Number型，不能与之前的序号重复
+      活动名称：填入活动的名称
+      活动crmid/接口Api：根据取值类型，此处选择crmid或者接口Api填入
+      活动描述：填入活动的描述信息
+      额外参数：一般为null
+      取值类型：
+        1：从关联的crmid获取参加活动的信息
+        2：移动端接口请求url，全量获取
+        3：猎金后台接口请求url，全量获取
+        4：猎金后台接口请求url，分页获取
+
+== 风控系统 ==
+
+== Tp5.1 Orm引入 ==
+  TP5.1ORM包在252的composer直接引入即可，
+  非composer的用户在内网gitlab的libiray库里面找到think-orm下下来，引入到项目中，自己写个psr4解析，即可使用
+  在CRM框架中引入ORM框架：
+    1.找到本项目初始化Db位置，在初始化原来的Db后，继续初始化Tp5.1的Db
+    2.设置成员属性，存储Tp5.1的Db
+    3.找到本项目的切换Db的位置，在切换原来的Db后，继续切换Tp5.1的Db
+    3.在设置Bean的表名时，为Tp5.1的Db设置表名
+    4.在业务中，实例化Bean，调起存储Tp5.1Db的属性，直接用Tp5.1的操作方法即可
+  
+
+  [
+    {
+      "begin_balance": 11553.03,
+      "final_balance": 12153.03,
+      "sum_deposit": 600.00,
+      "date": 1541779200
+    }
+  ]
+  字段详解：
+  begin_balance: 期初余额
+  final_balance: 期末余额
+  sum_deposit: 入金和
+  date: 发送日期
+
+= 2018-11-09 =
+== 猎金模拟黄金交易大赛数据导入 ==
+==== 相关任务 ====
+ [http://172.20.2.254:8080/browse/IMS-3082 IMS-3082]
+
+==== 问题现象 ====
+ 模拟交易大赛查询[猎金]页面，点击下载按钮，永远都只下载第一页数据
+
+==== 问题原因 ====
+ 点击下载按钮时，没有传入页码，导致每次默认请求的都是第一页数据。
+
+==== 解决方案 ====
+ 点击下载按钮时，上传当前页码。
+
+
+== 客户自动分配 ==
+  执行脚本：cron_auto_dist_sge_account.php
+  分发时间：每日8-21内，09-11,13-17,20-21三个时间段，每10分钟进行一次分发
+  分发规则：
+    1.销售日常业绩奖励产生的客户分发（含历史未分发完全的奖励）
+    2.销售经理客户分发
+    3.上述分发完成后，还有多余的客户资料，进行销售平均分发
+  1.销售日常业绩奖励产生的客户分发（含历史未分发完全的奖励）
+    分发限制：为尽量给每个销售每天都分到用户，则对需要分发奖励的销售进行重复循环
+             每次循环，分发一个客户，当达到奖励上限时，过滤这个销售，此客户分发
+             给下一位被奖励的销售。
+  2.销售经理客户分发
+    分发销售经理下属销售奖励客户的2倍客户数。
+    分发限制：无分发限制，一次性分发完毕。
+  3.平均分发
+    分发限制：将多余的客户均分给每个销售
+
+  字段顺序：
+    userid： userid,
+    tradeno： 交易账号,
+    name: 用户姓名,
+    openTime: 开户时间,
+    goldTimes: 黄金次数,
+    silverTimes: 白银次数,
+    goldGTimes: 黄金克数,
+    dealFlag: 交易标识 0,1,2 0白天 1晚上 2深夜
+    platform: 平台标识 4工行 8平安
+
+  地址: ,
+  身份校验参数: 
+    token: aaabbbbxccsadasdasdasd123
+  方法参数: 无
+  返回格式: [
+    code: 0,
+    msg: "success",
+    extra: {
+      topColspan: 2, // top部位标签总共的单元格行数
+      leftColspan: 2 // left部位标签总共占据的单元格列数
+    },
+    data: [
+      {
+        cid: 1,          // 标签id
+        pid: 0,         // 标签父级id
+        cname: '博士',   // 标签名
+        colspan: 5      // 标签占据单元格数量
+        position: 'left' // 标签方位
+      }
+    ]
+  ]
+
+=== 请求动态密码 ===
+  地址：
+  参数：
+  {
+    email：xxxxx@myhexin.com
+  }
+  返回值：
+  {
+    code: 0,
+    msg: "success" 
+  }
+
+=== 请求token ===
+  地址：
+  参数：
+  {
+    eamil：xxxxx@myhexin.com
+    password：596432
+  }
+  返回值：
+  {
+    code: 0,
+    msg: "success"
+    data: {
+      token: xxxxxxxxxxxxxxxxx
+    }
+  }
+
+=== 获取人员 ===
+  地址：
+  参数：
+  {
+    name: "FMS", // 项目名
+    tag: "开发|JAVA开发" // 标签名 多个用|分割
+  },
+  返回值:
+  {
+    code: 0,
+    msg: "success",
+    data: {
+      [
+        name: "XX1"
+      ],
+      [
+        name: "XX2"
+      ]
+    }
+  }
+
+  {
+    "actid": "xxxxx", // 活动方提供 
+    "flag": "xxxxx", // 活动房提供
+    "data": [
+      {
+        "userid": 12654,
+        "deal_goods": 1, // 交易品种
+        "deal_nums": 1.268, // 交易手数
+        "deal_direct": 1, // 开平仓
+        "deal_poundage": 1.25, // 交易手续费
+        "platform": 1 // 开户平台
+      }
+    ]
+  }
+
+  [
+    {
+      "userid":   123456,
+      "account":  "xxxxx",
+      "platform": 1 
+    }
+  ]
+  字段详解：
+  userid:   用户同花顺ID
+  account:  用户同花顺账号
+  platform: 平台标识
+    1: 深圳金融
+    2: 浦发银行
+    4: 工商银行
+    8: 平安银行
